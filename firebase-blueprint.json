@@ -1,0 +1,74 @@
+{
+  "entities": {
+    "Session": {
+      "title": "Session",
+      "description": "A homework session created by a teacher.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "active": { "type": "boolean" }
+      },
+      "required": ["name", "createdAt", "active"]
+    },
+    "Question": {
+      "title": "Question",
+      "description": "A question extracted from the PDF.",
+      "type": "object",
+      "properties": {
+        "sessionId": { "type": "string" },
+        "text": { "type": "string" },
+        "correctAnswer": { "type": "string" },
+        "order": { "type": "integer" }
+      },
+      "required": ["sessionId", "text", "correctAnswer", "order"]
+    },
+    "Student": {
+      "title": "Student",
+      "description": "A student participating in a session.",
+      "type": "object",
+      "properties": {
+        "sessionId": { "type": "string" },
+        "name": { "type": "string" },
+        "points": { "type": "integer" },
+        "joinedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["sessionId", "name", "points", "joinedAt"]
+    },
+    "Submission": {
+      "title": "Submission",
+      "description": "A student's answer and bet for a question.",
+      "type": "object",
+      "properties": {
+        "sessionId": { "type": "string" },
+        "studentId": { "type": "string" },
+        "questionId": { "type": "string" },
+        "answer": { "type": "string" },
+        "bet": { "type": "integer" },
+        "isCorrect": { "type": "boolean" },
+        "pointsAwarded": { "type": "integer" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["sessionId", "studentId", "questionId", "answer", "bet", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/sessions/{sessionId}": {
+      "schema": "Session",
+      "description": "Collection of homework sessions."
+    },
+    "/sessions/{sessionId}/questions/{questionId}": {
+      "schema": "Question",
+      "description": "Questions for a specific session."
+    },
+    "/sessions/{sessionId}/students/{studentId}": {
+      "schema": "Student",
+      "description": "Students in a specific session."
+    },
+    "/sessions/{sessionId}/submissions/{submissionId}": {
+      "schema": "Submission",
+      "description": "Submissions for a specific session."
+    }
+  }
+}

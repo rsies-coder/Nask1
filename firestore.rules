@@ -1,0 +1,42 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && 
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' || 
+         (request.auth.token.email == "r.sies@onc.unicoz.nl" && request.auth.token.email_verified == true));
+    }
+
+    // Sessions: Anyone can read active sessions to join
+    match /sessions/{sessionId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin() || true; // Temporarily allow true for prototype, but isAdmin is the goal
+
+      match /questions/{questionId} {
+        allow read: if true;
+        allow write: if isAdmin() || true;
+      }
+
+      match /students/{studentId} {
+        allow read: if true;
+        allow create, update: if true;
+      }
+
+      match /submissions/{submissionId} {
+        allow read: if true;
+        allow create: if true;
+        allow update, delete: if isAdmin() || true;
+      }
+    }
+
+    match /users/{userId} {
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow write: if isAdmin();
+    }
+  }
+}

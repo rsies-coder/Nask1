@@ -1,0 +1,8 @@
+{
+  "name": "Huiswerk Gokspel",
+  "description": "Een app waar leerlingen hun huiswerk invoeren en punten inzetten op hun antwoorden. De docent uploadt een PDF met vragen en antwoorden.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
